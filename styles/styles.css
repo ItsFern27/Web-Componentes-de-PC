@@ -1,0 +1,23 @@
+body {
+    display: grid;
+    grid-template-areas: "header" "header" "header"
+                         "main" "main" "main"
+                         "footer" "footer" "footer";
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial;
+}
+
+header {
+    grid-area: "header";    
+}
+
+main {
+    grid-area: "main";
+}
+
+footer {
+    grid-area: "footer";
+}
+
