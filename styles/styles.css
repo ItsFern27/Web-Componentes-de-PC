@@ -37,6 +37,7 @@ body {
 .nav-link:hover {
   text-decoration: none !important;
   outline: none;
+  color: inherit;
 }
 
 /* Reset a la lista para quitar bullets y padding (important para eliminar puntos negros) */
@@ -46,16 +47,21 @@ ul.navbar-nav {
   padding-left: 0;
 }
 
-/* Bootstrap usa columna en móvil; aquí forzamos fila SOLO en >= lg
-   (coincide con navbar-expand-lg) */
+/* --- Ajustes para espaciado y distribución --- */
+
+/* A partir de lg (>=992px) mostramos en fila y controlamos gap.
+   NOTA: no forzamos width:100% en el UL para evitar que los items se separen demasiado. */
 @media (min-width: 992px) {
   ul.navbar-nav {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1.25rem; /* espacio entre items */
+    gap: 10rem; /* espacio entre items del menú (ajusta aquí) */
+    width: auto; /* importante para que no estire todo el ancho */
   }
 }
+
+/* En móviles usamos la disposición por defecto (columna). */
 
 /* Estilo de los nav links */
 .nav-link {
@@ -63,19 +69,53 @@ ul.navbar-nav {
   color: #e9ecef;
   display: inline-flex;
   align-items: center;
-  padding: .3rem .4rem;
+  padding: .35rem .5rem; /* espacio vertical/horizontal dentro del link */
+  border-radius: 6px;
 }
 
+/* Si quieres más separación icon-text, ya tiene me-2 en HTML; si quieres más increméntalo */
+.nav-link .bi {
+  font-size: 1.15rem;
+}
+
+/* Hover */
 .nav-link:hover {
   color: #28a745; /* verde acento */
+  background: rgba(40,167,69,0.06); /* leve feedback visual */
+  text-decoration: none;
 }
 
 /* Búsqueda */
-.form-control {
-  border-radius: 20px;
-  padding-left: 15px;
+/* usamos input-group y limitamos su ancho máximo pero permitimos que crezca */
+.search-group {
+  width: 100%;
+  max-width: 560px; /* ancho máximo en desktop */
+  min-width: 180px;
+  display: flex;
+  align-items: center;
 }
 
+.search-input {
+  border-radius: 20px 0 0 20px !important;
+  padding-left: 15px;
+  border-right: 0;
+  flex: 1 1 auto; /* que crezca según espacio */
+}
+
+.search-group .btn {
+  border-radius: 0 20px 20px 0;
+  border-left: 0;
+}
+
+/* en pantallas pequeñas no sea demasiado ancha */
+@media (max-width: 767.98px) {
+  .search-group {
+    max-width: 260px;
+  }
+  .search-input { min-width: 120px; }
+}
+
+/* botón buscar */
 .btn-outline-success {
   border-color: #28a745;
   color: #28a745;
@@ -91,10 +131,13 @@ ul.navbar-nav {
   color: #28a745;
   font-weight: 500;
   text-decoration: none;
+  padding: .25rem .4rem;
+  border-radius: 6px;
 }
 
 .login-link:hover {
   color: #1e7e34;
+  background: rgba(40,167,69,0.04);
 }
 
 /* Sticky */
@@ -102,4 +145,13 @@ ul.navbar-nav {
   position: sticky;
   top: 0;
   z-index: 1020;
+}
+
+/* Opcional: ajuste fino si hay demasiada separación entre el centro (ul) y la búsqueda.
+   Si tu layout aún muestra mucho espacio, reduce este margen en el contenedor del formulario. */
+@media (min-width: 992px) {
+  /* Le damos al bloque completo de búsqueda + login un ancho mínimo para que no se vaya al final */
+  .navbar .d-flex.align-items-center {
+    min-width: 320px; /* ajusta: 320px es suficiente para el input y el login */
+  }
 }
