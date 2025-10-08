@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa;
+  background-color: hsl(0, 0%, 95%);
 }
 
 /* Navbar */
@@ -155,3 +155,34 @@ ul.navbar-nav {
     min-width: 320px; /* ajusta: 320px es suficiente para el input y el login */
   }
 }
+
+/* Banner */
+.banner{
+    background: url(../imagenes/fondo4.jpg);
+    min-height: 400px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-content{
+    position: relative;
+    color: white;
+    text-align: center;
+    z-index: 1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
