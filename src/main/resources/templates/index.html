@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuarios</title>
-    <link rel="stylesheet"  />
+    <link rel="stylesheet" />
 </head>
+
 <body>
     <!-- Mostrar solo si NO está autenticado -->
     <div sec:authorize="isAnonymous()">
-        <a th:href="@{/views/login}">Iniciar sesión</a>
+        <a th:href="@{/login}">Iniciar sesión</a>
     </div>
     <!-- Mostrar solo si está autenticado -->
     <div sec:authorize="isAuthenticated()">
@@ -46,4 +48,5 @@
         </tbody>
     </table>
 </body>
+
 </html>

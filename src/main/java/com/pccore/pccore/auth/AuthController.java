@@ -11,16 +11,21 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
     @GetMapping("/me")
     public Map<String, Object> getCurrentUser() {
+
+        // Se obtiene la información del usuario logueado que está accediendo
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
             return Map.of("authenticated", false);
         }
+
         return Map.of(
             "authenticated", true,
             "username", auth.getName(),
             "authorities", auth.getAuthorities()
         );
     }
+
 }

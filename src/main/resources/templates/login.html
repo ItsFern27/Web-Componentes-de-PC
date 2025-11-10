@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Login</title>
     <meta charset="UTF-8">
 </head>
+
 <body>
     <h2>Iniciar sesión</h2>
     <form th:action="@{/auth/login}" method="post">
@@ -22,4 +24,5 @@
         <p th:if="${param.logout}">Sesión cerrada correctamente</p>
     </form>
 </body>
+
 </html>

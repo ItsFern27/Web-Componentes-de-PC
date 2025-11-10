@@ -20,46 +20,62 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            /* Coso para evitar que otros sitios hagan POST a nuestras API con la sesión del usuario, cuando esta habilitado esto genera un token que se pone en los forms */
             .csrf(csrf -> csrf.disable())
+
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/views/login", "/views/acceso-denegado", "/auth/login", "/auth/register", "/auth/me"
+                .requestMatchers( /* URLS habilitadas para visitar sin login */
+                    "/login", "/acceso-denegado", "/auth/login", "/auth/register", "/auth/me", "/", "/index"
                 ).permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+
+                .requestMatchers("/admin/**").hasRole("ADMIN") /* URLS habilitadas con rol especifico */
+
+                .anyRequest().authenticated() /* Cualquier request se necesita estar logueado, exceptuando las habilitadas */
             )
+
+            /* Configuracion del sistema de login por formulario de HTML normal */
+            /* Esto se puede desactivar y manejarlo manualmente por RestController pero Sí */
             .formLogin(form -> form
-                .loginPage("/views/login")
+                .loginPage("/login")
                 .loginProcessingUrl("/auth/login")
                 .defaultSuccessUrl("/", true)
-                .failureUrl("/views/login?error=true")
-                .permitAll()
+                .failureUrl("/login?error=true")
+                .permitAll() /* URLS habilitadas para visitar sin login */
             )
+
+            /* Manejo del logout automatico, se puede hacer manual por RestControllers */
             .logout(logout -> logout
                 .logoutUrl("/auth/logout")
-                .logoutSuccessUrl("/views/login?logout=true")
+                .logoutSuccessUrl("/")
                 .permitAll()
             )
+
+            /* Manejar que hacer cuando un usuario intenta acceder a algo que no tiene permisos */
+            /* EJM: Usuario CLIENTE entra a /admin */
             .exceptionHandling(ex -> ex
-                .accessDeniedPage("/views/acceso-denegado")
+                .authenticationEntryPoint((request, response, authException) -> {
+                    // Usuario no autenticado intenta entrar a /admin/**
+                    response.sendRedirect("/"); // Redirige al inicio
+                })
+                .accessDeniedPage("/index")
             );
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // ATENCIÓN: Solo para pruebas, no recomendado en producción
+        return NoOpPasswordEncoder.getInstance(); // Se usa sin encoder, pero como eso no tiene constructor "new NoOp..." se tiene que llamar a ese metodo getInstance()
     }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
 }
