@@ -34,4 +34,8 @@ public class Productos {
     @OneToMany(mappedBy = "producto")
     private Set<ProductoCategoria> categorias;
 
+    // Relaciones con ItemProducto
+    @OneToMany(mappedBy = "producto")
+    private Set<ProductoCategoria> item;
+
 }

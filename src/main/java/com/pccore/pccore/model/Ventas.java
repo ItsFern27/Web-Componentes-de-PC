@@ -1,6 +1,7 @@
 package com.pccore.pccore.model;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,5 +33,9 @@ public class Ventas {
     @ManyToOne
     @JoinColumn(name = "id_cliente") // <- nombre de la columna en BD
     private Usuarios cliente;         // <- nombre del atributo en Java
+
+    // Relacion con DetalleVenta
+    @OneToMany(mappedBy = "venta")
+    private List<DetalleVenta> detalleVenta;
 
 }
