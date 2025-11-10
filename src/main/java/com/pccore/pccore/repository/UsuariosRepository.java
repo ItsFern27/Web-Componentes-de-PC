@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface UsuariosRepository extends JpaRepository<Usuarios, Long> {
     
+    // Obliga a usar orElseThrow para evitar errores de NullPointer
     Optional<Usuarios> findByEmail(String email);
 }
