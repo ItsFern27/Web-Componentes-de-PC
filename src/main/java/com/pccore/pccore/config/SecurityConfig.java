@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             /* Coso para evitar que otros sitios hagan POST a nuestras API con la sesión del usuario, cuando esta habilitado esto genera un token que se pone en los forms */
-            .csrf(csrf -> csrf.disable()) // coso generico de spring security que desactiva el csrf
+            .csrf(AbstractHttpConfigurer::disable) // coso generico de spring security que desactiva el csrf
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( /* URLS habilitadas para visitar sin login */
