@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Mostrar solo si NO está autenticado -->
+    <div sec:authorize="isAnonymous()">
+        <a th:href="@{/login}">Iniciar sesión</a>
+    </div>
+    <!-- Mostrar solo si está autenticado -->
+    <div sec:authorize="isAuthenticated()">
+        <p>¡Bienvenido, <span sec:authentication="name"></span>!</p>
+        <form th:action="@{/auth/logout}" method="post">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </div>
+    <!-- Mostrar solo a ADMIN -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <p>Sección exclusiva para administradores.</p>
+    </div>
+    <!-- Mostrar solo a usuarios normales -->
+    <div sec:authorize="hasRole('CLIENTE')">
+        <p>Contenido exclusivo para usuarios normales.</p>
+    </div>
+
+    <h1>Usuarios</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Creado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario['id']}"></td>
+                <td th:text="${usuario['nombre'] ?: 'No encontrado'}"></td>
+                <td th:text="${usuario['email'] ?: 'No encontrado'}"></td>
+                <td th:text="${usuario['created_at']}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
