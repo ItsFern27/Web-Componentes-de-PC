@@ -42,12 +42,12 @@ public class ItemProducto {
     // Relacion con producto
     @ManyToOne
     @JoinColumn(name = "id_producto", nullable = false)
-    private Long producto;
+    private Productos producto;
 
     // Relacion con proveedor
     @ManyToOne
     @JoinColumn(name = "id_proveedor", nullable = false)
-    private Long proveedor;
+    private Proveedores proveedor;
 
     // Relacion a detalleVenta
     @OneToOne
