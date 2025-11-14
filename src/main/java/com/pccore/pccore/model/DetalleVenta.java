@@ -24,9 +24,9 @@ public class DetalleVenta {
     @Column(nullable = false)
     private double precio_venta;
 
-    private int decuento;
+    private double descuento;
 
-    @Column(insertable = false, updatable = false)
+    @Column(insertable = true, updatable = false)
     private double subtotal;
 
     // Relacion con Ventas

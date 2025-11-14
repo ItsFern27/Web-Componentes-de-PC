@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head>
+    <!-- Los metadatos, títulos y enlaces CSS se deben definir en cada página individual -->
+</head>
+<body>
+
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center text-decoration-none" th:href="@{/}">
+          <i class="bi bi-gear-fill logo-icon me-2" aria-hidden="true"></i>
+          <span class="fw-bold logo-text">PCCore</span>
+        </a>
+
+        <!-- Botón móvil (hamburguesa) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenido colapsable -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          
+          <!-- Enlaces de navegación a la izquierda -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/}"><i class="bi bi-house-fill me-2"></i>Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/productos}"><i class="bi bi-motherboard-fill me-2"></i>Productos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/nosotros}"><i class="bi bi-people-fill me-2"></i>Nosotros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/contacto}"><i class="bi bi-envelope-fill me-2"></i>Contacto</a>
+            </li>
+          </ul>
+
+          <!-- Búsqueda y sesión a la derecha -->
+          <div class="d-flex align-items-center gap-3">
+            <!-- Barra de búsqueda -->
+            <form class="d-flex" role="search" onsubmit="return false;">
+              <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+              <button class="btn btn-outline-success" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </form>
+
+            <!-- Bloque de autenticación dinámico -->
+            <div sec:authorize="isAnonymous()" class="d-flex align-items-center">
+              <a th:href="@{/login}" class="login-link align-items-center text-decoration-none text-nowrap">
+                <i class="bi bi-person-circle me-2"></i>Iniciar Sesión
+              </a>
+            </div>
+
+            <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
+              <span class="text-white text-nowrap">
+                ¡Hola, <span sec:authentication="name">Usuario</span>!
+              </span>
+              <form th:action="@{/auth/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-box-arrow-right"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+</header>
+
+</body>
+</html>

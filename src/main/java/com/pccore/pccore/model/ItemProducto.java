@@ -50,8 +50,7 @@ public class ItemProducto {
     private Proveedores proveedor;
 
     // Relacion a detalleVenta
-    @OneToOne
-    @JoinColumn(name = "itemProducto")
+    @OneToOne(mappedBy = "itemProducto")
     private DetalleVenta venta;
 
 }
