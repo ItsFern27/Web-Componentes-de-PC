@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
+import jakarta.persistence.Transient;
+import java.text.DecimalFormat;
 
 @Entity
-@Table(name = "producto")
+@Table(name = "productos")
 @Getter
 @Setter
 public class Productos {
@@ -36,6 +38,20 @@ public class Productos {
 
     // Relaciones con ItemProducto
     @OneToMany(mappedBy = "producto")
-    private Set<ProductoCategoria> item;
+    private Set<ItemProducto> item;
+
+    @Transient
+    public Double getPrecio() {
+        if (item == null || item.isEmpty()) return null;
+        return item.stream().mapToDouble(ItemProducto::getPrecio).min().orElse(0);
+    }
+
+    @Transient
+    public String getPrecioStr() {
+        Double p = getPrecio();
+        if (p == null || p <= 0) return "";
+        DecimalFormat df = new DecimalFormat("#,##0.00");
+        return "S/ " + df.format(p);
+    }
 
 }

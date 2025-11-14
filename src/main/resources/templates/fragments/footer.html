@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<footer class="bg-dark text-white text-center text-lg-start mt-5" th:fragment="footer">
+      <div class="container p-4">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 mb-4">
+            <h5 class="text-uppercase">Contacto</h5>
+            <ul class="list-unstyled mb-3">
+              <li>
+                <i class="bi bi-envelope-fill me-2"></i>
+                <a href="mailto:Pccore@gmail.com" class="text-white text-decoration-none">Pccore@gmail.com</a>
+              </li>
+              <li>
+                <i class="bi bi-telephone-fill me-2"></i>
+                <a href="tel:+51987654321" class="text-white text-decoration-none">+51 987 654 321</a>
+              </li>
+              <li>
+                <i class="bi bi-geo-alt-fill me-2"></i>
+                Ctra. Panamericana Sur km 16, Villa EL Salvador 15842
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+            <h5 class="text-uppercase">Enlaces rápidos</h5>
+            <ul class="list-unstyled">
+              <li>
+                <a th:href="@{/nosotros}" rel="noopener noreferrer" class="text-white text-decoration-none">
+                  Sobre Nosotros
+                </a>
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none">Política de Privacidad</a>
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none">Términos del servicio</a>
+              </li>
+              <li>
+                <a href="#" class="text-white text-decoration-none">Devoluciones</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-12 mb-4">
+            <h5 class="text-uppercase">Síguenos</h5>
+            <a href="https://www.facebook.com/share/g/19KmqNSYr2/" target="_blank" rel="noopener noreferrer" class="text-white me-3 text-decoration-none" aria-label="Facebook">
+              <i class="bi bi-facebook"></i>
+            </a>
+            <a href="https://x.com/elonmusk" target="_blank" rel="noopener noreferrer" class="text-white me-3 text-decoration-none" aria-label="Twitter">
+              <i class="bi bi-twitter"></i>
+            </a>
+            <a href="https://www.instagram.com/cristiano/" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none" aria-label="Instagram">
+              <i class="bi bi-instagram"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center p-3 bg-secondary text-white">
+        © 2025 Todos los derechos reservados a Seeth | PCCore
+      </div>
+    </footer>
+
+</body>
+</html>

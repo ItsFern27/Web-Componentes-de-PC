@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 // import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -31,7 +31,9 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( /* URLS habilitadas para visitar sin login */
-                    "/login", "/acceso-denegado", "/auth/login", "/auth/register", "/auth/me", "/", "/index"
+                    "/login", "/acceso-denegado", "/auth/login", "/auth/register", "/auth/me", "/", "/index",
+                    "/productos", "/nosotros", "/contacto",
+                    "/styles/**", "/imagenes/**", "/js/**", "/css/**", "/favicon.ico", "/webjars/**", "/debug/**", "/public-debug/**", "/public/**"
                 ).permitAll()
 
                 .requestMatchers("/admin/**").hasRole("ADMIN") /* URLS habilitadas con rol especifico */
@@ -58,19 +60,19 @@ public class SecurityConfig {
 
             /* Manejar que hacer cuando un usuario intenta acceder a algo que no tiene permisos */
             /* EJM: Usuario CLIENTE entra a /admin */
-            .exceptionHandling(ex -> ex
+                .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
-                    // Usuario no autenticado intenta entrar a /admin/**
-                    response.sendRedirect("/"); // Redirige al inicio
+                    // Usuario no autenticado intenta entrar a recurso protegido -> llevar a login
+                    response.sendRedirect("/login");
                 })
-                .accessDeniedPage("/index")
+                .accessDeniedPage("/login?denied")
             );
         return http.build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // Se usa sin encoder, pero como eso no tiene constructor "new NoOp..." se tiene que llamar a ese metodo getInstance()
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
