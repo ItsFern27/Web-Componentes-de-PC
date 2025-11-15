@@ -31,8 +31,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         log.info("Usuario encontrado: {} (rol={})", usuario.getEmail(), usuario.getRol());
 
-        // Sin password hasheado
-        return User.withUsername(usuario.getEmail())
+        return User.builder()
+            .username(usuario.getEmail())
             .password(usuario.getPassword())
             .roles(usuario.getRol())
             .build();
