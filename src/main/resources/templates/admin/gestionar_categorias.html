@@ -18,8 +18,118 @@
                 <div th:replace="~{admin/admin_menu :: admin_menu}"></div>
             </div>
             <div class="col-md-9">
-                <h1>Gestionar Categorías</h1>
-                <p>Esta sección está en construcción.</p>
+                <!-- Success and Error Messages -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1>Gestión de Categorías</h1>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createCategoriaModal">
+                        <i class="bi bi-plus-lg"></i> Crear Categoría
+                    </button>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Nueva Categoría</h5>
+                        <form th:action="@{/admin/categorias/crear}" th:object="${categoriaNueva}" method="post">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre de la Categoría</label>
+                                <input type="text" class="form-control" id="nombre" th:field="*{nombre}" placeholder="Ej: Tarjetas Gráficas" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcion" th:field="*{descripcion}" rows="3" placeholder="Describe la categoría..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">Crear Categoría</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Categorías Existentes</h5>
+                        <div class="list-group">
+                            <div th:each="categoria : ${categorias}" class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-bold" th:text="${categoria.nombre}"></div>
+                                    <div class="text-muted" th:text="${categoria.descripcion}"></div>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" th:attr="data-bs-target='#editCategoriaModal-' + ${categoria.id}">editar</button>
+                                    <form th:action="@{/admin/categorias/eliminar/{id}(id=${categoria.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Category Modal -->
+    <div class="modal fade" id="createCategoriaModal" tabindex="-1" aria-labelledby="createCategoriaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/admin/categorias/crear}" th:object="${categoriaNueva}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoriaModalLabel">Nueva Categoría</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="nombreModal" class="form-label">Nombre de la Categoría</label>
+                            <input type="text" class="form-control" id="nombreModal" th:field="*{nombre}" placeholder="Ej: Tarjetas Gráficas" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionModal" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcionModal" th:field="*{descripcion}" rows="3" placeholder="Describe la categoría..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Crear Categoría</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Category Modals -->
+    <div th:each="categoria : ${categorias}">
+        <div class="modal fade" th:id="'editCategoriaModal-' + ${categoria.id}" tabindex="-1" th:aria-labelledby="'editCategoriaModalLabel-' + ${categoria.id}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form th:action="@{/admin/categorias/editar/{id}(id=${categoria.id})}" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" th:id="'editCategoriaModalLabel-' + ${categoria.id}">Editar Categoría</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label th:for="'nombre-' + ${categoria.id}" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" th:id="'nombre-' + ${categoria.id}" name="nombre" th:value="${categoria.nombre}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label th:for="'descripcion-' + ${categoria.id}" class="form-label">Descripción</label>
+                                <textarea class="form-control" th:id="'descripcion-' + ${categoria.id}" name="descripcion" th:text="${categoria.descripcion}" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
