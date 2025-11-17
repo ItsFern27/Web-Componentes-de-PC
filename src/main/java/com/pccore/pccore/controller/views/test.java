@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class test {
     @GetMapping("/yo")
+    // @AuthPrincipal obtiene el usuario logueado que hace GET a esta Ruta
     public Map<String, Object> perfilUsuario(@AuthenticationPrincipal UserDetails user, Model model) {
 
         Map<String, Object> res = new HashMap<>();

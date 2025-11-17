@@ -12,5 +12,14 @@ public interface ProductosRepository extends JpaRepository<Productos, Long> {
 	List<Productos> findAllWithItems();
 
 	List<Productos> findTop3ByOrderByIdDesc();
+
+	// Buscar Productos por Nombre con el parametro, contenido en cualquier parte del nombre, ignorando mayusculas y minusculas
+	List<Productos> findByNombreContainingIgnoreCase(String nombre);
     
+	// Buscar Productos que tengan al menos una Categoría cuyo nombre
+	// contenga el parámetro, ignorando mayúsculas y minúsculas
+	List<Productos> findByCategorias_Categoria_NombreContainingIgnoreCase(String nombreCategoria);
+
+	List<Productos> findByNombreContainingIgnoreCaseAndCategorias_Categoria_NombreContainingIgnoreCase(String nombreProducto, String nombreCategoria);
+
 }

@@ -46,8 +46,8 @@
           <!-- Búsqueda y sesión a la derecha -->
           <div class="d-flex align-items-center gap-3">
             <!-- Barra de búsqueda -->
-            <form class="d-flex" role="search" onsubmit="return false;">
-              <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+            <form class="d-flex" role="search" th:action="@{/productos}" method="get">
+              <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar" name="query" th:value="${query}">
               <button class="btn btn-outline-success" type="submit">
                 <i class="bi bi-search"></i>
               </button>
@@ -62,7 +62,7 @@
 
             <div sec:authorize="isAuthenticated()" class="d-flex align-items-center gap-2">
               <span class="text-white text-nowrap">
-                ¡Hola, <span sec:authentication="name">Usuario</span>!
+                ¡Hola, <span sec:authentication="principal.username">Usuario</span>!
               </span>
               <form th:action="@{/auth/logout}" method="post" class="d-inline">
                 <button type="submit" class="btn btn-outline-danger btn-sm">

@@ -87,11 +87,11 @@
           <div class="card h-100 shadow-sm border-0">
             <div class="card-body text-center">
                   <!-- Si imagen es una URL completa -->
-                  <img class="card-img-top" th:if="${producto.imagen != null and #strings.startsWith(producto.imagen,'http')}" th:alt="${producto.nombre}" th:src="${producto.imagen}" />
+                  <img class="card-img-top product-card-image" th:if="${producto.imagen != null and #strings.startsWith(producto.imagen,'http')}" th:alt="${producto.nombre}" th:src="${producto.imagen}" />
                   <!-- Si imagen es un nombre de archivo relativo dentro de /imagenes -->
-                  <img class="card-img-top" th:if="${producto.imagen != null and producto.imagen != '' and !#strings.startsWith(producto.imagen,'http')}" th:alt="${producto.nombre}" th:src="@{/imagenes/{img}(img=${producto.imagen})}" />
+                  <img class="card-img-top product-card-image" th:if="${producto.imagen != null and producto.imagen != '' and !#strings.startsWith(producto.imagen,'http')}" th:alt="${producto.nombre}" th:src="@{/imagenes/{img}(img=${producto.imagen})}" />
                   <!-- Si no hay imagen, usar placeholder -->
-                  <img class="card-img-top" th:if="${producto.imagen == null or producto.imagen == ''}" th:alt="${producto.nombre}" th:src="@{'https://via.placeholder.com/300x200?text=Sin+imagen'}" />
+                  <img class="card-img-top product-card-image" th:if="${producto.imagen == null or producto.imagen == ''}" th:alt="${producto.nombre}" th:src="@{'https://via.placeholder.com/300x200?text=Sin+imagen'}" />
               <h5 class="card-title mt-3" th:text="${producto.nombre}">Nombre</h5>
               <p class="card-text text-muted" th:text="${producto.marca} + ' - ' + ${producto.modelo}">Marca - Modelo</p>
               <p class="card-text text-success fw-bold" th:text="${producto.precioStr}">S/ 0.00</p>
