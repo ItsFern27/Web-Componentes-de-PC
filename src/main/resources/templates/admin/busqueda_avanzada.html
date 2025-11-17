@@ -100,7 +100,7 @@
                                         <td th:text="${#numbers.formatCurrency(item.precio)}"></td>
                                         <td th:text="${item.numero_de_serie}"></td>
                                         <td th:text="${#temporals.format(item.fecha_ingreso, 'dd-MM-yyyy HH:mm')}"></td>
-                                        <td class="d-flex gap-1">
+                                        <td class="gap-1">
                                             <a th:href="@{/admin/items/editar/{id}(id=${item.id})}" class="btn btn-sm btn-warning">Editar</a>
                                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmationModal" th:attr="data-bs-url=@{/admin/items/eliminar/{id}(id=${item.id})}">
                                                 Eliminar
