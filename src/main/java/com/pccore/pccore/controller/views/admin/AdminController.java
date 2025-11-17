@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 
@@ -132,8 +133,24 @@ public class AdminController {
     }
 
     @GetMapping("/items")
-    public String gestionarItems() {
+    public String gestionarItems(Model model) {
+        model.addAttribute("itemNuevo", new ItemProducto());
+        model.addAttribute("productos", productosRepository.findAll());
+        model.addAttribute("proveedores", proveedoresRepository.findAll());
         return "admin/gestionar_items";
+    }
+
+    @PostMapping("/items/crear")
+    public String crearItem(@ModelAttribute("itemNuevo") ItemProducto item, RedirectAttributes redirectAttributes) {
+        try {
+            item.setFecha_ingreso(OffsetDateTime.now());
+            item.setEstado("DISPONIBLE");
+            itemProductoRepository.save(item);
+            redirectAttributes.addFlashAttribute("successMessage", "Item creado exitosamente.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el item.");
+        }
+        return "redirect:/admin/items";
     }
 
     @GetMapping("/proveedores")
