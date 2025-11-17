@@ -7,11 +7,14 @@ import com.pccore.pccore.repository.ItemProductoRepository;
 import com.pccore.pccore.repository.ProductosRepository;
 import com.pccore.pccore.repository.ProveedoresRepository;
 import com.pccore.pccore.specification.ItemProductoSpecification;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,21 +51,41 @@ public class AdminController {
     }
 
     @PostMapping("/productos/crear")
-    public String crearProducto(@ModelAttribute("productoNuevo") Productos producto) {
-        productosRepository.save(producto);
+    public String crearProducto(@ModelAttribute("productoNuevo") Productos producto, RedirectAttributes redirectAttributes) {
+        try {
+            productosRepository.save(producto);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto creado exitosamente.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el producto. El 'modelo' ya existe.");
+        }
         return "redirect:/admin/productos";
     }
 
     @PostMapping("/productos/editar/{id}")
-    public String editarProducto(@PathVariable Long id, @ModelAttribute Productos producto) {
+    public String editarProducto(@PathVariable Long id, @ModelAttribute Productos producto, RedirectAttributes redirectAttributes) {
         producto.setId(id);
-        productosRepository.save(producto);
+        try {
+            productosRepository.save(producto);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado exitosamente.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al editar el producto. El 'modelo' ya existe.");
+        }
         return "redirect:/admin/productos";
     }
 
     @PostMapping("/productos/eliminar/{id}")
-    public String eliminarProducto(@PathVariable Long id) {
-        productosRepository.deleteById(id);
+    public String eliminarProducto(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        // Check if there are related items
+        if (itemProductoRepository.existsByProductoId(id)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "No se puede eliminar el producto porque tiene items asociados.");
+            return "redirect:/admin/productos";
+        }
+        try {
+            productosRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Producto eliminado exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar el producto.");
+        }
         return "redirect:/admin/productos";
     }
 
@@ -125,7 +148,7 @@ public class AdminController {
             @RequestParam(required = false) Long categoriaId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta,
-            @RequestParam(required = false) Boolean disponibleFilter,
+            @RequestParam(required =false) Boolean disponibleFilter,
             Model model) {
 
         Specification<ItemProducto> spec = ItemProductoSpecification.findByCriteria(
