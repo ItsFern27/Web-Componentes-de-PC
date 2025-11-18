@@ -82,8 +82,33 @@
 		document.addEventListener('click', function(e){
 			const btn = e.target.closest && e.target.closest('.btn-comprar');
 			if(!btn) return;
-			const id = btn.getAttribute('data-item-id');
-			alert('Implementar flujo de compra para el ítem ID: ' + id);
+			const itemId = btn.getAttribute('data-item-id');
+
+			fetch(`/api/purchase/${itemId}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(response => {
+				if (response.ok) {
+					return response.text(); // O response.json() si el backend devuelve JSON
+				} else if (response.status === 401) {
+					window.location.href = '/login'; // Redirigir al login si no está autenticado
+					return Promise.reject('No autenticado');
+				} else {
+					return response.text().then(text => Promise.reject(text));
+				}
+			})
+			.then(message => {
+				alert('¡Compra exitosa! ' + message);
+				// Opcional: Recargar la página o actualizar el estado del ítem en la UI
+				window.location.reload();
+			})
+			.catch(error => {
+				console.error('Error en la compra:', error);
+				alert('Error al procesar la compra: ' + error);
+			});
 		});
 	</script>
 </body>

@@ -1,11 +1,5 @@
 package com.pccore.pccore.model;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.Set;
-import jakarta.persistence.Transient;
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "productos")
@@ -41,16 +35,18 @@ public class Productos {
     private Set<ItemProducto> item;
 
     @Transient
-    public Double getPrecio() {
-        if (item == null || item.isEmpty()) return null;
-        // Convierte el List en in Iterable; Toma cada ItemProducto, extrae su precio y lo mapea a double; obtiene el minimo de todos. Y por si acaso devuelve 0 si no encuentra nada
-        return item.stream().mapToDouble(ItemProducto::getPrecio).min().orElse(0);
+    public BigDecimal getPrecio() {
+        if (item == null || item.isEmpty()) return BigDecimal.ZERO;
+        return item.stream()
+                   .map(ItemProducto::getPrecio)
+                   .min(BigDecimal::compareTo)
+                   .orElse(BigDecimal.ZERO);
     }
 
     @Transient
     public String getPrecioStr() {
-        Double p = getPrecio();
-        if (p == null || p <= 0) return "";
+        BigDecimal p = getPrecio();
+        if (p == null || p.compareTo(BigDecimal.ZERO) <= 0) return "";
         DecimalFormat df = new DecimalFormat("#,##0.00");
         return "S/ " + df.format(p);
     }

@@ -1,15 +1,6 @@
 package com.pccore.pccore.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "detalle_venta")
@@ -22,12 +13,12 @@ public class DetalleVenta {
     private Long id;
     
     @Column(nullable = false)
-    private double precio_venta;
+    private BigDecimal precioVenta;
 
-    private double descuento;
+    private BigDecimal descuento;
 
     @Column(insertable = true, updatable = false)
-    private double subtotal;
+    private BigDecimal subtotal;
 
     // Relacion con Ventas
     @ManyToOne

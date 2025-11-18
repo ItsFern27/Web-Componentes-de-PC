@@ -25,7 +25,7 @@ public class ItemProducto {
     private Long id;
 
     @Column(nullable = false)
-    private double precio;
+    private BigDecimal precio;
 
     @Column(nullable = false)
     private String estado;
