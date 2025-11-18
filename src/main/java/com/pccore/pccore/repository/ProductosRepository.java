@@ -22,4 +22,7 @@ public interface ProductosRepository extends JpaRepository<Productos, Long> {
 
 	List<Productos> findByNombreContainingIgnoreCaseAndCategorias_Categoria_NombreContainingIgnoreCase(String nombreProducto, String nombreCategoria);
 
+	@Query("select p from Productos p left join fetch p.item where p.id = :id")
+    java.util.Optional<Productos> findByIdWithItems(Long id);
+
 }
