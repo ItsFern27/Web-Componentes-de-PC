@@ -32,7 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers( /* URLS habilitadas para visitar sin login */
                     "/login", "/acceso-denegado", "/auth/login", "/auth/register", "/auth/me", "/", "/index",
-                    "/productos", "/nosotros", "/contacto",
+                    "/productos", "/producto/**", "/nosotros", "/contacto",
                     "/styles/**", "/imagenes/**", "/js/**", "/css/**", "/favicon.ico", "/webjars/**", "/debug/**", "/public-debug/**", "/public/**"
                 ).permitAll()
 

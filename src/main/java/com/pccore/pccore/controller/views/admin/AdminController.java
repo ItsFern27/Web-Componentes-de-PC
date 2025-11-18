@@ -128,8 +128,44 @@ public class AdminController {
     }
 
     @GetMapping("/categorias")
-    public String gestionarCategorias() {
+    public String gestionarCategorias(Model model) {
+        model.addAttribute("categorias", categoriasRepository.findAll());
+        model.addAttribute("categoriaNueva", new com.pccore.pccore.model.Categorias());
         return "admin/gestionar_categorias";
+    }
+
+    @PostMapping("/categorias/crear")
+    public String crearCategoria(@ModelAttribute("categoriaNueva") com.pccore.pccore.model.Categorias categoria, RedirectAttributes redirectAttributes) {
+        try {
+            categoriasRepository.save(categoria);
+            redirectAttributes.addFlashAttribute("successMessage", "Categoría creada exitosamente.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear la categoría.");
+        }
+        return "redirect:/admin/categorias";
+    }
+
+    @PostMapping("/categorias/editar/{id}")
+    public String editarCategoria(@PathVariable Long id, @ModelAttribute com.pccore.pccore.model.Categorias categoria, RedirectAttributes redirectAttributes) {
+        categoria.setId(id);
+        try {
+            categoriasRepository.save(categoria);
+            redirectAttributes.addFlashAttribute("successMessage", "Categoría actualizada exitosamente.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al editar la categoría.");
+        }
+        return "redirect:/admin/categorias";
+    }
+
+    @PostMapping("/categorias/eliminar/{id}")
+    public String eliminarCategoria(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            categoriasRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Categoría eliminada exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al eliminar la categoría.");
+        }
+        return "redirect:/admin/categorias";
     }
 
     @GetMapping("/items")
