@@ -1,24 +1,30 @@
 package com.pccore.pccore.controller.views.admin;
 
-import com.pccore.pccore.model.ItemProducto;
-import com.pccore.pccore.model.Productos;
-import com.pccore.pccore.repository.CategoriasRepository;
-import com.pccore.pccore.repository.ItemProductoRepository;
-import com.pccore.pccore.repository.ProductosRepository;
-import com.pccore.pccore.repository.ProveedoresRepository;
-import com.pccore.pccore.specification.ItemProductoSpecification;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.List;
+import com.pccore.pccore.model.ItemProducto;
+import com.pccore.pccore.model.Productos;
+import com.pccore.pccore.model.Proveedores;
+import com.pccore.pccore.repository.CategoriasRepository;
+import com.pccore.pccore.repository.ItemProductoRepository;
+import com.pccore.pccore.repository.ProductosRepository;
+import com.pccore.pccore.repository.ProveedoresRepository;
+import com.pccore.pccore.specification.ItemProductoSpecification;
 
 
 @Controller
@@ -190,8 +196,52 @@ public class AdminController {
     }
 
     @GetMapping("/proveedores")
-    public String gestionarProveedores() {
+    public String gestionarProveedores(Model model) {
+        model.addAttribute("proveedores", proveedoresRepository.findAll());
+        model.addAttribute("proveedorNuevo", new com.pccore.pccore.model.Proveedores());
         return "admin/gestionar_proveedores";
+    }
+
+    @PostMapping("/proveedores/crear")
+    public String crearProveedor(@ModelAttribute("proveedorNuevo") Proveedores proveedor,
+                                RedirectAttributes redirectAttributes) {
+        try {
+            proveedoresRepository.save(proveedor);
+            redirectAttributes.addFlashAttribute("successMessage", "Proveedor creado exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al crear el proveedor.");
+        }
+        return "redirect:/admin/proveedores";
+    }
+
+    @PostMapping("/proveedores/editar/{id}")
+    public String editarProveedor(@PathVariable Long id,
+                                @ModelAttribute Proveedores proveedor,
+                                RedirectAttributes redirectAttributes) {
+
+        proveedor.setId(id);
+
+        try {
+            proveedoresRepository.save(proveedor);
+            redirectAttributes.addFlashAttribute("successMessage", "Proveedor actualizado exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error al editar el proveedor.");
+        }
+
+        return "redirect:/admin/proveedores";
+    }
+
+    @PostMapping("/proveedores/eliminar/{id}")
+    public String eliminarProveedor(@PathVariable Long id,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            proveedoresRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Proveedor eliminado exitosamente.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "No se puede eliminar el proveedor. Es posible que esté asociado a items.");
+        }
+
+        return "redirect:/admin/proveedores";
     }
 
     @GetMapping("/busqueda_avanzada")
