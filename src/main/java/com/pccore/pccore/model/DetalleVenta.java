@@ -26,8 +26,9 @@ public class DetalleVenta {
 
     private double descuento;
 
-    @Column(insertable = true, updatable = false)
-    private double subtotal;
+    @Column(insertable = false, updatable = false)
+    private Double subtotal;
+
 
     // Relacion con Ventas
     @ManyToOne
