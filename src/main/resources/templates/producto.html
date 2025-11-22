@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -63,7 +63,8 @@
 									<td th:text="${it.fecha_ingreso != null ? it.fecha_ingreso.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy')) : '-'}">-</td>
 									<td>
 										<!-- Placeholder: implementar endpoint de compra -->
-										<button type="button" class="btn btn-sm btn-success btn-comprar" th:attr="data-item-id=${it.id}">Comprar</button>
+										<button sec:authorize="isAuthenticated()" type="button" class="btn btn-sm btn-success btn-comprar" th:attr="data-item-id=${it.id}">Comprar</button>
+										<a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-sm btn-success">Comprar</a>
 									</td>
 								</tr>
 							</tbody>
