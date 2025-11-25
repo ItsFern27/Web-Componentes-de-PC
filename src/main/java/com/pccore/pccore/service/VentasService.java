@@ -38,9 +38,9 @@ public class VentasService {
 
         // Crear venta
         Ventas venta = new Ventas();
-        venta.setCliente(usuario);                   // ✔ CORRECTO
-        venta.setFecha(OffsetDateTime.now());        // ✔ CORRECTO
-        venta.setTotal(0);                           // Opcional pero recomendado
+        venta.setCliente(usuario);
+        venta.setFecha(OffsetDateTime.now());
+        venta.setTotal(item.getPrecio());
         ventasRepository.save(venta);
 
         // Crear detalle de venta
